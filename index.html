@@ -232,21 +232,39 @@ footer{background:var(--dark3);border-top:1px solid rgba(200,148,58,.1);padding:
 
 
 <!-- ADMIN LOGIN -->
-<div id="adm-login-screen">
-  <div class="login-box">
+<div id="adm-login-screen" style="position:fixed;inset:0;background:#0a0800;z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#141008;border:1px solid rgba(200,148,58,.2);border-radius:20px;padding:28px 24px;width:100%;max-width:360px">
     <div style="text-align:center;margin-bottom:22px">
       <div style="font-size:44px;margin-bottom:8px">🛡️</div>
-      <div style="font-size:17px;font-weight:900;color:var(--gold)">لوحة تحكم المالك</div>
-      <div style="font-size:12px;color:var(--mute);margin-top:4px">عسل در النجف</div>
+      <div style="font-size:17px;font-weight:900;color:#c8943a">لوحة تحكم المالك</div>
+      <div style="font-size:12px;color:#8a7248;margin-top:4px">عسل در النجف</div>
     </div>
-    <div class="albl">كلمة المرور</div>
-    <input id="adm-pw" type="password" class="ainp" placeholder="••••••••" style="margin-bottom:12px" onkeydown="if(event.key==='Enter')doAdmLogin()">
+    <div style="font-size:11px;color:#8a7248;font-weight:600;margin-bottom:5px">كلمة المرور</div>
+    <input id="adm-pw" type="password" placeholder="••••••••" style="background:#0a0800;border:1.5px solid rgba(200,148,58,.2);color:#f0e6c8;font-family:Cairo,sans-serif;border-radius:10px;padding:11px 13px;width:100%;outline:none;font-size:14px;margin-bottom:12px;-webkit-appearance:none">
     <div id="adm-pw-err" style="display:none;font-size:12px;color:#ef4444;margin-bottom:10px;padding:8px;background:#1a0505;border-radius:8px"></div>
-    <button class="abtn" style="width:100%;padding:13px;font-size:14px" onclick="doAdmLogin()">دخول</button>
-    <button onclick="closeAdminLogin()" style="width:100%;padding:10px;margin-top:8px;background:none;border:none;color:var(--mute);font-family:Cairo,sans-serif;font-size:13px;cursor:pointer">← رجوع للمتجر</button>
-    <div style="text-align:center;font-size:11px;color:var(--dim);margin-top:12px">كلمة المرور الافتراضية: <b style="color:var(--gold)">admin1234</b></div>
+    <button id="do-adm-login" style="background:linear-gradient(135deg,#c8943a,#8b6020);border:none;color:#0a0800;font-family:Cairo,sans-serif;font-weight:900;font-size:14px;cursor:pointer;padding:13px;width:100%;border-radius:10px;margin-bottom:8px">دخول</button>
+    <button onclick="document.getElementById('adm-login-screen').style.display='none'" style="width:100%;padding:10px;background:none;border:none;color:#8a7248;font-family:Cairo,sans-serif;font-size:13px;cursor:pointer">← رجوع للمتجر</button>
+    <div style="text-align:center;font-size:11px;color:#5a4828;margin-top:12px">كلمة المرور الافتراضية: <b style="color:#c8943a">admin1234</b></div>
   </div>
 </div>
+<script>
+document.getElementById("do-adm-login").addEventListener("click",function(){
+  var pw=document.getElementById("adm-pw").value.trim();
+  var correct=localStorage.getItem("honey_adm_simple")||"admin1234";
+  if(pw!==correct){
+    var e=document.getElementById("adm-pw-err");
+    e.textContent="كلمة المرور غير صحيحة ❌";e.style.display="block";
+    setTimeout(function(){e.style.display="none";},3000);return;
+  }
+  document.getElementById("adm-login-screen").style.display="none";
+  document.getElementById("store").style.display="none";
+  document.getElementById("admin").style.display="block";
+  admTab("products");loadAdmProducts();
+});
+document.getElementById("adm-pw").addEventListener("keydown",function(e){
+  if(e.key==="Enter")document.getElementById("do-adm-login").click();
+});
+</script>
 
 <!-- STORE -->
 <div id="store">
@@ -663,20 +681,26 @@ function renderCart(){
     el.innerHTML='<div class="cs-empty"><div style="font-size:52px;margin-bottom:10px">🛒</div><div>السلة فارغة</div></div>';
     ft.innerHTML="";return;
   }
-  el.innerHTML=cart.map(function(item){
-    return '<div class="ci-card">'+
-      '<div class="ci-icon">'+item.emoji+'</div>'+
+  el.innerHTML="";
+  cart.forEach(function(item){
+    var d=document.createElement("div");d.className="ci-card";
+    d.innerHTML='<div class="ci-icon">'+item.emoji+'</div>'+
       '<div style="flex:1;min-width:0">'+
       '<div class="ci-name">'+item.name+(item.weight?" ("+item.weight+")":"")+'</div>'+
       '<div class="ci-price">'+(item.price*item.qty).toLocaleString()+' د.ع</div>'+
-      '<div class="ci-qty">'+
-      '<button class="qbtn" onclick="chgQty(''+item.id+'',-1)">−</button>'+
-      '<span class="qnum">'+item.qty+'</span>'+
-      '<button class="qbtn" onclick="chgQty(''+item.id+'',1)">+</button>'+
-      '</div></div>'+
-      '<button class="ci-rm" onclick="rmFromCart(''+item.id+'')">🗑</button>'+
-      '</div>';
-  }).join("");
+      '<div class="ci-qty"><span id="qm-'+item.id+'"></span><span class="qnum">'+item.qty+'</span><span id="qp-'+item.id+'"></span></div>'+
+      '</div><span id="qr-'+item.id+'"></span>';
+    var bm=document.createElement("button");bm.className="qbtn";bm.textContent="−";
+    (function(id){bm.addEventListener("click",function(){chgQty(id,-1);});})(item.id);
+    var bp=document.createElement("button");bp.className="qbtn";bp.textContent="+";
+    (function(id){bp.addEventListener("click",function(){chgQty(id,1);});})(item.id);
+    var br=document.createElement("button");br.className="ci-rm";br.textContent="🗑";
+    (function(id){br.addEventListener("click",function(){rmFromCart(id);});})(item.id);
+    d.querySelector("#qm-"+item.id).replaceWith(bm);
+    d.querySelector("#qp-"+item.id).replaceWith(bp);
+    d.querySelector("#qr-"+item.id).replaceWith(br);
+    el.appendChild(d);
+  });
   var total=cart.reduce(function(a,c){return a+c.price*c.qty;},0);
   ft.innerHTML=
     '<div class="cs-total"><span class="cs-tlbl">الإجمالي</span><span class="cs-tval">'+total.toLocaleString()+' د.ع</span></div>'+
@@ -818,14 +842,21 @@ async function loadStats(){
   var lowEl=$("low-stock-list");
   var lowProds=prods.filter(function(p){return p.quantity<=5;}).sort(function(a,b){return a.quantity-b.quantity;});
   if(!lowProds.length){lowEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--mute)">كل المنتجات بمخزون جيد ✅</div>';return;}
-  lowEl.innerHTML=lowProds.map(function(p){
-    return '<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--dark);border-radius:10px;margin-bottom:8px">'+
-      '<span style="font-size:28px">'+p.emoji+'</span>'+
+  lowEl.innerHTML="";
+  lowProds.forEach(function(p){
+    var row=document.createElement("div");
+    row.style.cssText="display:flex;align-items:center;gap:10px;padding:10px;background:var(--dark);border-radius:10px;margin-bottom:8px";
+    row.innerHTML='<span style="font-size:28px">'+p.emoji+'</span>'+
       '<div style="flex:1"><div style="font-size:13px;font-weight:700">'+p.name+'</div>'+
       '<div style="font-size:12px;color:'+(p.quantity===0?"#ef4444":"#f97316")+'">الكمية: '+p.quantity+(p.quantity===0?" (نفذت!)":"")+'</div></div>'+
-      '<button onclick="editProd('+JSON.stringify(p).replace(/"/g,"'")+');admTab('add')" style="background:var(--dark2);border:1px solid rgba(200,148,58,.2);color:var(--mute);font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;padding:5px 10px;border-radius:7px">تعديل</button>'+
-      '</div>';
-  }).join("");
+      '<span id="low-edit-'+p.id+'"></span>';
+    var eb=document.createElement("button");
+    eb.style.cssText="background:var(--dark2);border:1px solid rgba(200,148,58,.2);color:var(--mute);font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;padding:5px 10px;border-radius:7px";
+    eb.textContent="تعديل";
+    (function(prod){eb.addEventListener("click",function(){editProd(prod);admTab("add");});})(p);
+    row.querySelector("#low-edit-"+p.id).replaceWith(eb);
+    lowEl.appendChild(row);
+  });
 }
 
 // SETTINGS
