@@ -551,8 +551,10 @@ function $(id){return document.getElementById(id);}
 
 // LOAD PRODUCTS
 async function loadProducts(){
-  var r=await sb.from("products").select("*").eq("active",true).order("created_at",{ascending:false});
-  products=r.data||[];
+  try{
+    var r=await sb.from("products").select("*").eq("active",true).order("created_at",{ascending:false});
+    products=r.data||[];
+  }catch(e){products=[];}
   renderCats();renderProds();
   var hp_el=$("h-prods");if(hp_el)hp_el.textContent=products.length;
   $("loading").style.display="none";
@@ -857,6 +859,7 @@ window.addEventListener("scroll",function(){
 });
 
 // INIT
+setTimeout(function(){if($("loading").style.display!=="none"){$("loading").style.display="none";}},5000);
 loadProducts();
 </script>
 </body>
