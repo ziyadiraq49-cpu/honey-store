@@ -702,13 +702,16 @@ function sendMsg(){
 function openAdminLogin(){$("adm-login-screen").classList.add("open");$("adm-pw").value="";}
 function closeAdminLogin(){$("adm-login-screen").classList.remove("open");}
 function doAdmLogin(){
-  var pw=$("adm-pw").value;
-  if(hp(pw)!==getAdmPw()){
-    $("adm-pw-err").textContent="كلمة المرور غير صحيحة";$("adm-pw-err").style.display="block";
-    setTimeout(function(){$("adm-pw-err").style.display="none";},3000);return;
+  var pw=document.getElementById("adm-pw").value;
+  var stored=localStorage.getItem(ADM_PW_KEY)||hp("admin1234");
+  if(hp(pw)!==stored){
+    var errEl=document.getElementById("adm-pw-err");
+    errEl.textContent="كلمة المرور غير صحيحة";errEl.style.display="block";
+    setTimeout(function(){errEl.style.display="none";},3000);return;
   }
-  $("adm-login-screen").classList.remove("open");
-  $("store").style.display="none";$("admin").style.display="block";
+  document.getElementById("adm-login-screen").style.display="none";
+  document.getElementById("store").style.display="none";
+  document.getElementById("admin").style.display="block";
   admTab("products");loadAdmProducts();
 }
 function exitAdmin(){$("admin").style.display="none";$("store").style.display="block";loadProducts();}
