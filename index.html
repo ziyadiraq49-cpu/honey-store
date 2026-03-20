@@ -858,8 +858,8 @@ window.addEventListener("scroll",function(){
   if(h)h.style.boxShadow=window.scrollY>40?"0 4px 20px rgba(0,0,0,.5)":"none";
 });
 
-// INIT
-setTimeout(function(){if($("loading").style.display!=="none"){$("loading").style.display="none";}},5000);
+// INIT - show store immediately
+$("loading").style.display="none";
 loadProducts();
 </script>
 </body>
