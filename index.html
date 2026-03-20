@@ -702,18 +702,19 @@ function sendMsg(){
 function openAdminLogin(){$("adm-login-screen").classList.add("open");$("adm-pw").value="";}
 function closeAdminLogin(){$("adm-login-screen").classList.remove("open");}
 function doAdmLogin(){
-  var pw=document.getElementById("adm-pw").value;
-  var stored=localStorage.getItem(ADM_PW_KEY)||hp("admin1234");
-  if(hp(pw)!==stored){
-    var errEl=document.getElementById("adm-pw-err");
-    errEl.textContent="كلمة المرور غير صحيحة";errEl.style.display="block";
-    setTimeout(function(){errEl.style.display="none";},3000);return;
+  var pw=document.getElementById("adm-pw").value.trim();
+  var correct=localStorage.getItem("honey_adm_simple")||"admin1234";
+  if(pw!==correct){
+    var e=document.getElementById("adm-pw-err");
+    e.textContent="كلمة المرور غير صحيحة";e.style.display="block";
+    setTimeout(function(){e.style.display="none";},3000);return;
   }
   document.getElementById("adm-login-screen").style.display="none";
   document.getElementById("store").style.display="none";
   document.getElementById("admin").style.display="block";
   admTab("products");loadAdmProducts();
 }
+
 function exitAdmin(){$("admin").style.display="none";$("store").style.display="block";loadProducts();}
 
 function admTab(t){
@@ -829,13 +830,13 @@ async function loadStats(){
 
 // SETTINGS
 function changeAdmPw(){
-  var np=$("new-pw").value,np2=$("new-pw2").value,msg=$("pw-msg");
+  var np=document.getElementById("new-pw").value,np2=document.getElementById("new-pw2").value,msg=document.getElementById("pw-msg");
   if(!np||!np2){msg.textContent="ملء الحقلين مطلوب";msg.style.background="#1a0505";msg.style.color="#ef4444";msg.style.display="block";return;}
   if(np.length<6){msg.textContent="6 أحرف على الأقل";msg.style.background="#1a0505";msg.style.color="#ef4444";msg.style.display="block";return;}
   if(np!==np2){msg.textContent="كلمتا المرور غير متطابقتين";msg.style.background="#1a0505";msg.style.color="#ef4444";msg.style.display="block";return;}
-  localStorage.setItem(ADM_PW_KEY,hp(np));
+  localStorage.setItem("honey_adm_simple",np);
   msg.textContent="✅ تم تغيير كلمة المرور";msg.style.background="#052e16";msg.style.color="#22c55e";msg.style.display="block";
-  $("new-pw").value=$("new-pw2").value="";
+  document.getElementById("new-pw").value=document.getElementById("new-pw2").value="";
 }
 
 // SWIPE TO CLOSE
