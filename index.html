@@ -175,14 +175,7 @@ footer{background:var(--dark3);border-top:1px solid rgba(200,148,58,.1);padding:
 #toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(16px);background:linear-gradient(135deg,var(--gold),var(--gold3));color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:13px;padding:10px 20px;border-radius:28px;z-index:500;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;box-shadow:0 4px 20px rgba(200,148,58,.4)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* LOADING */
-#loading{position:fixed;inset:0;background:var(--dark);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.load-icon{font-size:56px;animation:pulse 1.5s infinite}
-.load-bar{width:200px;height:3px;background:var(--dark3);border-radius:3px;overflow:hidden}
-.load-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:3px;animation:load 1.5s infinite}
-.load-txt{font-size:13px;color:var(--mute)}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-@keyframes load{0%{width:0%;margin-right:100%}50%{width:60%;margin-right:40%}100%{width:0%;margin-right:0%}}
+
 
 /* ADMIN PANEL */
 #admin{display:none;min-height:100vh;background:#060400}
@@ -236,12 +229,7 @@ footer{background:var(--dark3);border-top:1px solid rgba(200,148,58,.1);padding:
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading">
-  <div class="load-icon">🍯</div>
-  <div class="load-bar"><div class="load-fill"></div></div>
-  <div class="load-txt">جاري التحميل...</div>
-</div>
+
 
 <!-- ADMIN LOGIN -->
 <div id="adm-login-screen">
@@ -557,7 +545,7 @@ async function loadProducts(){
   }catch(e){products=[];}
   renderCats();renderProds();
   var hp_el=$("h-prods");if(hp_el)hp_el.textContent=products.length;
-  $("loading").style.display="none";
+  
 }
 
 // CATEGORIES
@@ -859,7 +847,7 @@ window.addEventListener("scroll",function(){
 });
 
 // INIT - show store immediately
-$("loading").style.display="none";
+
 loadProducts();
 </script>
 </body>
