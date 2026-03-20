@@ -2,20 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0800">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>عسل در النجف</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --gold:#c8943a;--gold2:#f0c060;--gold3:#8b6020;
-  --dark:#0a0800;--dark2:#141008;--dark3:#1e1608;--dark4:#281e0c;
-  --txt:#f0e6c8;--mute:#8a7248;--dim:#5a4828;
-  --grn:#22c55e;--red:#ef4444
-}
+:root{--gold:#c8943a;--gold2:#f0c060;--gold3:#8b6020;--dark:#0a0800;--dark2:#141008;--dark3:#1e1608;--dark4:#281e0c;--txt:#f0e6c8;--mute:#8a7248;--dim:#5a4828;--grn:#22c55e;--red:#ef4444}
 html{scroll-behavior:smooth}
 body{background:var(--dark);color:var(--txt);font-family:"Cairo",sans-serif;overflow-x:hidden}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--dark2)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
@@ -23,9 +19,8 @@ body{background:var(--dark);color:var(--txt);font-family:"Cairo",sans-serif;over
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(10,8,0,.96);border-bottom:1px solid rgba(200,148,58,.2);backdrop-filter:blur(12px)}
 .hlogo{display:flex;align-items:center;gap:9px;cursor:pointer}
-.hlogo-icon{font-size:28px;filter:drop-shadow(0 0 8px rgba(200,148,58,.4))}
-.hlogo-text{line-height:1.1}
-.hlogo-name{font-size:15px;font-weight:900;color:var(--gold);letter-spacing:.5px}
+.hlogo-icon{font-size:26px}
+.hlogo-name{font-size:15px;font-weight:900;color:var(--gold)}
 .hlogo-sub{font-size:10px;color:var(--mute)}
 .hnav{display:flex;align-items:center;gap:8px}
 .hnav-link{background:none;border:none;color:var(--mute);font-family:"Cairo",sans-serif;font-size:12px;cursor:pointer;padding:5px 10px;border-radius:16px;transition:all .2s}
@@ -33,20 +28,21 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;
 .cart-fab{background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#0a0800;font-family:"Cairo",sans-serif;font-size:12px;font-weight:900;cursor:pointer;padding:7px 13px;border-radius:20px;display:flex;align-items:center;gap:6px;transition:all .2s}
 .cart-fab:active{transform:scale(.96)}
 .cbadge{background:#0a0800;color:var(--gold);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+@media(max-width:480px){.hnav-link{display:none}}
 
 /* HERO */
 #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px 48px;position:relative;overflow:hidden}
 .hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(200,148,58,.12) 0%,transparent 70%);pointer-events:none}
-.hive-pattern{position:absolute;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48'%3E%3Cpolygon fill='%23c8943a' points='28,2 54,16 54,32 28,46 2,32 2,16'/%3E%3C/svg%3E");background-size:56px 48px;pointer-events:none}
+.hive-bg{position:absolute;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48'%3E%3Cpolygon fill='%23c8943a' points='28,2 54,16 54,32 28,46 2,32 2,16'/%3E%3C/svg%3E");background-size:56px 48px;pointer-events:none}
 .hero-chip{background:rgba(200,148,58,.12);border:1px solid rgba(200,148,58,.25);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--gold);margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;animation:fup .7s ease both}
 .hero-h1{font-family:"Amiri",serif;font-size:clamp(38px,9vw,78px);font-weight:700;line-height:1.1;margin-bottom:6px;animation:fup .7s .1s ease both}
 .hero-h1 em{color:var(--gold);font-style:normal;display:block}
 .hero-p{font-size:15px;color:var(--mute);max-width:420px;line-height:1.9;margin:16px auto 32px;animation:fup .7s .2s ease both}
-.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fup .7s .3s ease both}
-.btn-prim{background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:14px;cursor:pointer;padding:13px 28px;border-radius:28px;transition:all .3s}
-.btn-prim:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,148,58,.35)}
-.btn-sec{background:transparent;border:1.5px solid rgba(200,148,58,.4);color:var(--gold);font-family:"Cairo",sans-serif;font-weight:700;font-size:14px;cursor:pointer;padding:12px 28px;border-radius:28px;transition:all .3s}
-.btn-sec:hover{background:rgba(200,148,58,.08)}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fup .7s .3s ease both}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:14px;cursor:pointer;padding:13px 28px;border-radius:28px;transition:all .3s}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,148,58,.35)}
+.btn-out{background:transparent;border:1.5px solid rgba(200,148,58,.4);color:var(--gold);font-family:"Cairo",sans-serif;font-weight:700;font-size:14px;cursor:pointer;padding:12px 28px;border-radius:28px;transition:all .3s}
+.btn-out:hover{background:rgba(200,148,58,.08)}
 .hero-nums{display:flex;gap:28px;justify-content:center;margin-top:48px;animation:fup .7s .4s ease both}
 .hnum{text-align:center}
 .hnum-val{font-size:26px;font-weight:900;color:var(--gold);display:block}
@@ -58,7 +54,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;
 
 /* SECTIONS */
 section{padding:72px 16px}
-.sec-inner{max-width:1080px;margin:0 auto}
+.sec-in{max-width:1080px;margin:0 auto}
 .sec-head{text-align:center;margin-bottom:44px}
 .sec-tag{display:block;font-size:10px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
 .sec-title{font-family:"Amiri",serif;font-size:clamp(24px,4vw,40px);font-weight:700;margin-bottom:10px}
@@ -86,14 +82,15 @@ section{padding:72px 16px}
 .pcard:hover{border-color:rgba(200,148,58,.35);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
 .pcard-img{width:100%;aspect-ratio:1;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:clamp(52px,12vw,72px);position:relative}
 .pcard-badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#0a0800;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px}
+.pcard-out{position:absolute;top:10px;left:10px;background:#450a0a;color:#ef4444;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px;border:1px solid #7f1d1d}
 .pcard-body{padding:12px}
-.pcard-name{font-size:13px;font-weight:700;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pcard-stars{color:var(--gold);font-size:11px;margin-bottom:7px}
+.pcard-name{font-size:13px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard-weight{font-size:11px;color:var(--mute);margin-bottom:5px}
 .pcard-foot{display:flex;align-items:center;justify-content:space-between;gap:6px}
 .pcard-price{font-size:14px;font-weight:900;color:var(--gold);flex-shrink:0}
-.pcard-price small{font-size:10px;color:var(--mute);font-weight:400}
 .add-btn{background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:11px;cursor:pointer;padding:6px 12px;border-radius:16px;transition:all .2s;flex-shrink:0}
-.add-btn:active{transform:scale(.94)}
+.add-btn:disabled{opacity:.4;cursor:not-allowed}
+.add-btn:not(:disabled):active{transform:scale(.94)}
 
 /* FEATURES */
 #sec-feat{background:var(--dark2)}
@@ -104,17 +101,6 @@ section{padding:72px 16px}
 .feat-title{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px}
 .feat-desc{font-size:11px;color:var(--mute);line-height:1.7}
 
-/* TESTIMONIALS */
-#sec-test{background:var(--dark)}
-.test-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.tcard{background:var(--dark2);border:1px solid rgba(200,148,58,.1);border-radius:14px;padding:18px;position:relative}
-.tq{font-size:36px;color:var(--gold);opacity:.25;position:absolute;top:10px;left:16px;font-family:serif;line-height:1}
-.ttxt{font-size:12px;color:var(--mute);line-height:1.8;margin-bottom:14px;padding-top:16px}
-.tauth{display:flex;align-items:center;gap:9px}
-.tav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#0a0800;flex-shrink:0}
-.tname{font-size:13px;font-weight:700}
-.tcity{font-size:10px;color:var(--mute)}
-
 /* CONTACT */
 #sec-contact{background:var(--dark2)}
 .contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
@@ -124,7 +110,7 @@ section{padding:72px 16px}
 .citem-icon{font-size:20px;flex-shrink:0}
 .citem-lbl{font-size:10px;color:var(--mute)}
 .citem-val{font-size:13px;font-weight:700}
-.wa-btn{background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:white;font-family:"Cairo",sans-serif;font-weight:900;font-size:14px;cursor:pointer;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:all .3s;margin-top:4px}
+.wa-btn{background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:white;font-family:"Cairo",sans-serif;font-weight:900;font-size:14px;cursor:pointer;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:all .3s}
 .wa-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.3)}
 .cform{background:var(--dark);border:1px solid rgba(200,148,58,.15);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:12px}
 .finp{background:var(--dark2);border:1.5px solid rgba(200,148,58,.2);color:var(--txt);font-family:"Cairo",sans-serif;border-radius:10px;padding:11px 13px;width:100%;outline:none;font-size:13px;transition:border-color .2s;-webkit-appearance:none}
@@ -163,175 +149,369 @@ footer{background:var(--dark3);border-top:1px solid rgba(200,148,58,.1);padding:
 .cs-tlbl{font-size:13px;color:var(--mute)}
 .cs-tval{font-size:20px;font-weight:900;color:var(--gold)}
 .checkout-btn{background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:white;font-family:"Cairo",sans-serif;font-weight:900;font-size:14px;cursor:pointer;padding:13px;border-radius:12px;width:100%;transition:all .3s}
-.checkout-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,211,102,.3)}
 .cs-empty{text-align:center;padding:40px 20px;color:var(--mute)}
 
 /* PRODUCT MODAL */
 #prod-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:400;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
 #prod-ov.open{opacity:1;pointer-events:all}
-#prod-modal{background:var(--dark2);border:1px solid rgba(200,148,58,.2);border-radius:22px 22px 0 0;width:100%;max-width:580px;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);padding:20px}
+#prod-modal{background:var(--dark2);border:1px solid rgba(200,148,58,.2);border-radius:22px 22px 0 0;width:100%;max-width:580px;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);padding:20px;position:relative}
 #prod-ov.open #prod-modal{transform:translateY(0)}
 .pm-handle{width:38px;height:4px;background:rgba(200,148,58,.25);border-radius:4px;margin:0 auto 18px}
-.pm-icon{font-size:88px;text-align:center;background:var(--dark3);border-radius:16px;padding:20px;margin-bottom:16px}
-.pm-name{font-size:20px;font-weight:900;margin-bottom:8px}
-.pm-stars{font-size:14px;color:var(--gold);margin-bottom:8px}
+.pm-icon{font-size:80px;text-align:center;background:var(--dark3);border-radius:16px;padding:20px;margin-bottom:16px}
+.pm-name{font-size:20px;font-weight:900;margin-bottom:6px}
+.pm-weight{font-size:13px;color:var(--mute);margin-bottom:8px}
 .pm-desc{font-size:13px;color:var(--mute);line-height:1.9;margin-bottom:16px}
-.pm-price{font-size:28px;font-weight:900;color:var(--gold);margin-bottom:20px}
-.pm-price small{font-size:13px;color:var(--mute);font-weight:400}
+.pm-price{font-size:28px;font-weight:900;color:var(--gold);margin-bottom:8px}
+.pm-stock{font-size:12px;margin-bottom:20px}
 .pm-feats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
 .pm-feat{background:var(--dark3);border-radius:10px;padding:11px;text-align:center}
 .pm-feat .fi{font-size:20px;margin-bottom:4px;display:block}
 .pm-feat .ft{font-size:10px;color:var(--gold);font-weight:700}
 .pm-add{background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:15px;cursor:pointer;padding:14px;border-radius:13px;width:100%;transition:all .3s}
-.pm-add:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,148,58,.3)}
+.pm-add:disabled{opacity:.4;cursor:not-allowed}
 .pm-close{position:absolute;top:18px;left:18px;background:var(--dark3);border:none;color:var(--mute);cursor:pointer;width:34px;height:34px;border-radius:50%;font-size:15px;display:flex;align-items:center;justify-content:center}
 
 /* TOAST */
 #toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(16px);background:linear-gradient(135deg,var(--gold),var(--gold3));color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:13px;padding:10px 20px;border-radius:28px;z-index:500;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;box-shadow:0 4px 20px rgba(200,148,58,.4)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-@media(max-width:480px){.hnav-link{display:none}}
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--dark);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.load-icon{font-size:56px;animation:pulse 1.5s infinite}
+.load-bar{width:200px;height:3px;background:var(--dark3);border-radius:3px;overflow:hidden}
+.load-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:3px;animation:load 1.5s infinite}
+.load-txt{font-size:13px;color:var(--mute)}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes load{0%{width:0%;margin-right:100%}50%{width:60%;margin-right:40%}100%{width:0%;margin-right:0%}}
+
+/* ADMIN PANEL */
+#admin{display:none;min-height:100vh;background:#060400}
+.adm-hdr{background:rgba(6,4,0,.97);border-bottom:1px solid rgba(200,148,58,.2);padding:0 16px;position:sticky;top:0;z-index:50;height:60px;display:flex;align-items:center;justify-content:space-between}
+.adm-title{font-size:15px;font-weight:900;color:var(--gold)}
+.adm-exit{background:#1e1608;border:1px solid rgba(200,148,58,.3);color:var(--mute);font-family:"Cairo",sans-serif;border-radius:8px;padding:6px 13px;font-size:12px;cursor:pointer}
+.adm-in{max-width:800px;margin:0 auto;padding:16px 16px 80px}
+.adm-tabs{display:flex;gap:6px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px}
+.adm-tab{white-space:nowrap;padding:8px 16px;border:1px solid rgba(200,148,58,.2);border-radius:20px;font-family:"Cairo",sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:var(--dark2);color:var(--mute);transition:all .2s}
+.adm-tab.on{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#0a0800;border-color:transparent}
+.adm-card{background:var(--dark2);border:1px solid rgba(200,148,58,.15);border-radius:14px;padding:18px;margin-bottom:14px}
+.adm-card-title{font-size:14px;font-weight:900;margin-bottom:14px;color:var(--gold)}
+.ainp{background:var(--dark);border:1.5px solid rgba(200,148,58,.2);color:var(--txt);font-family:"Cairo",sans-serif;border-radius:10px;padding:10px 13px;width:100%;outline:none;font-size:13px;transition:border-color .2s;-webkit-appearance:none}
+.ainp:focus{border-color:var(--gold)}
+.ainp::placeholder{color:var(--mute)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.albl{font-size:11px;color:var(--mute);margin-bottom:5px;font-weight:600}
+.abtn{background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;color:#0a0800;font-family:"Cairo",sans-serif;font-weight:900;font-size:13px;cursor:pointer;padding:11px;border-radius:10px;transition:all .2s}
+.abtn:active{transform:scale(.97)}
+.abtn-rd{background:linear-gradient(135deg,#ef4444,#b91c1c);border:none;color:white;font-family:"Cairo",sans-serif;font-weight:900;font-size:12px;cursor:pointer;padding:7px 13px;border-radius:8px}
+.abtn-gr{background:linear-gradient(135deg,#22c55e,#15803d);border:none;color:white;font-family:"Cairo",sans-serif;font-weight:900;font-size:12px;cursor:pointer;padding:7px 13px;border-radius:8px}
+.abtn-sm{background:var(--dark);border:1px solid rgba(200,148,58,.2);color:var(--mute);font-family:"Cairo",sans-serif;font-size:11px;cursor:pointer;padding:5px 10px;border-radius:7px}
+.prod-row{background:var(--dark);border:1px solid rgba(200,148,58,.1);border-radius:12px;padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.prod-row-icon{font-size:30px;width:48px;height:48px;background:var(--dark3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prod-row-info{flex:1;min-width:0}
+.prod-row-name{font-size:13px;font-weight:700;margin-bottom:3px}
+.prod-row-meta{font-size:11px;color:var(--mute)}
+.prod-row-btns{display:flex;gap:6px;flex-shrink:0}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.stat-box{background:var(--dark);border:1px solid rgba(200,148,58,.1);border-radius:12px;padding:16px;text-align:center}
+.stat-val{font-size:24px;font-weight:900;color:var(--gold);display:block;margin-bottom:4px}
+.stat-lbl{font-size:11px;color:var(--mute)}
+.toggle-sw{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0;position:absolute}
+.toggle-sl{position:absolute;inset:0;background:#333;border-radius:22px;cursor:pointer;transition:.3s}
+.toggle-sl::before{content:"";position:absolute;width:16px;height:16px;background:white;border-radius:50%;top:3px;right:3px;transition:.3s}
+.toggle-sw input:checked+.toggle-sl{background:var(--gold)}
+.toggle-sw input:checked+.toggle-sl::before{right:21px}
+
+/* ADMIN LOGIN */
+#adm-login-screen{position:fixed;inset:0;background:var(--dark);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#adm-login-screen.open{display:flex}
+.login-box{background:var(--dark2);border:1px solid rgba(200,148,58,.2);border-radius:20px;padding:28px 24px;width:100%;max-width:360px}
+
+/* EMOJI PICKER */
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-height:160px;overflow-y:auto;background:var(--dark);border:1px solid rgba(200,148,58,.15);border-radius:10px;padding:10px;margin-top:6px}
+.emoji-opt{font-size:24px;cursor:pointer;text-align:center;padding:4px;border-radius:6px;transition:background .15s}
+.emoji-opt:hover,.emoji-opt.sel{background:rgba(200,148,58,.2)}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="hlogo" onclick="goTo('#hero')">
-    <span class="hlogo-icon">🍯</span>
-    <div class="hlogo-text">
-      <div class="hlogo-name">عسل در النجف</div>
-      <div class="hlogo-sub">منتجات طبيعية أصيلة</div>
-    </div>
-  </div>
-  <div class="hnav">
-    <button class="hnav-link" onclick="goTo('#sec-prods')">المنتجات</button>
-    <button class="hnav-link" onclick="goTo('#sec-contact')">تواصل</button>
-    <button class="cart-fab" onclick="toggleCart()">
-      🛒 <span id="cart-count-lbl">السلة</span>
-      <span class="cbadge" id="cbadge">0</span>
-    </button>
-  </div>
-</header>
+<!-- LOADING -->
+<div id="loading">
+  <div class="load-icon">🍯</div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+  <div class="load-txt">جاري التحميل...</div>
+</div>
 
-<section id="hero">
-  <div class="hero-glow"></div>
-  <div class="hive-pattern"></div>
-  <div class="hero-chip">🌿 أجود العسل الطبيعي من النجف الأشرف</div>
-  <h1 class="hero-h1">عسل طبيعي<em>أصيل ونقي</em></h1>
-  <p class="hero-p">نقدم لكم أجود أنواع العسل الطبيعي المستخرج بعناية من مناحل محلية معتمدة، غني بالفوائد والنكهة الأصيلة</p>
-  <div class="hero-actions">
-    <button class="btn-prim" onclick="goTo('#sec-prods')">🛒 تسوّق الآن</button>
-    <button class="btn-sec" onclick="goTo('#sec-feat')">اعرف أكثر</button>
+<!-- ADMIN LOGIN -->
+<div id="adm-login-screen">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:22px">
+      <div style="font-size:44px;margin-bottom:8px">🛡️</div>
+      <div style="font-size:17px;font-weight:900;color:var(--gold)">لوحة تحكم المالك</div>
+      <div style="font-size:12px;color:var(--mute);margin-top:4px">عسل در النجف</div>
+    </div>
+    <div class="albl">كلمة المرور</div>
+    <input id="adm-pw" type="password" class="ainp" placeholder="••••••••" style="margin-bottom:12px" onkeydown="if(event.key==='Enter')doAdmLogin()">
+    <div id="adm-pw-err" style="display:none;font-size:12px;color:#ef4444;margin-bottom:10px;padding:8px;background:#1a0505;border-radius:8px"></div>
+    <button class="abtn" style="width:100%;padding:13px;font-size:14px" onclick="doAdmLogin()">دخول</button>
+    <button onclick="closeAdminLogin()" style="width:100%;padding:10px;margin-top:8px;background:none;border:none;color:var(--mute);font-family:Cairo,sans-serif;font-size:13px;cursor:pointer">← رجوع للمتجر</button>
+    <div style="text-align:center;font-size:11px;color:var(--dim);margin-top:12px">كلمة المرور الافتراضية: <b style="color:var(--gold)">admin1234</b></div>
   </div>
-  <div class="hero-nums">
-    <div class="hnum"><span class="hnum-val">+500</span><span class="hnum-lbl">زبون راضٍ</span></div>
-    <div class="hnum"><span class="hnum-val">15+</span><span class="hnum-lbl">نوع عسل</span></div>
-    <div class="hnum"><span class="hnum-val">5 ★</span><span class="hnum-lbl">تقييم العملاء</span></div>
-  </div>
-  <div class="scroll-hint"><span>تصفّح</span><div class="scroll-line"></div></div>
-</section>
+</div>
 
-<section id="sec-cats">
-  <div class="sec-inner">
-    <div class="sec-head">
-      <span class="sec-tag">تصفح حسب النوع</span>
-      <h2 class="sec-title">اختر ما يناسبك</h2>
-    </div>
-    <div class="cats-wrap" id="cats-wrap"></div>
-  </div>
-</section>
-
-<section id="sec-prods">
-  <div class="sec-inner">
-    <div class="sec-head">
-      <span class="sec-tag">منتجاتنا</span>
-      <h2 class="sec-title">تشكيلة العسل الفاخر</h2>
-      <p class="sec-sub">كل منتج يمر بفحص جودة دقيق لضمان أعلى مستوى من النقاء والطعم</p>
-    </div>
-    <div class="filter-row">
-      <div class="sbox">
-        <span style="color:var(--mute)">🔍</span>
-        <input type="text" placeholder="ابحث عن منتج..." id="sinp" oninput="filterP()">
-      </div>
-      <select class="srt-sel" id="srtsel" onchange="filterP()">
-        <option value="def">الترتيب الافتراضي</option>
-        <option value="pa">السعر: من الأقل</option>
-        <option value="pd">السعر: من الأعلى</option>
-      </select>
-    </div>
-    <div class="prods-grid" id="prods-grid"></div>
-  </div>
-</section>
-
-<section id="sec-feat">
-  <div class="sec-inner">
-    <div class="sec-head">
-      <span class="sec-tag">لماذا نحن؟</span>
-      <h2 class="sec-title">مميزاتنا</h2>
-    </div>
-    <div class="feat-grid">
-      <div class="feat-card"><span class="feat-icon">🌿</span><div class="feat-title">طبيعي 100%</div><p class="feat-desc">عسل خالص بدون إضافات، مستخرج مباشرة من الخلية</p></div>
-      <div class="feat-card"><span class="feat-icon">🔬</span><div class="feat-title">جودة مختبرة</div><p class="feat-desc">كل دفعة تخضع لفحص مخبري لضمان النقاء العالي</p></div>
-      <div class="feat-card"><span class="feat-icon">🚚</span><div class="feat-title">توصيل لكل العراق</div><p class="feat-desc">نوصل لجميع المحافظات خلال 24-48 ساعة</p></div>
-      <div class="feat-card"><span class="feat-icon">💯</span><div class="feat-title">ضمان الجودة</div><p class="feat-desc">إذا لم تكن راضياً نستبدل أو نرجع المبلغ</p></div>
-      <div class="feat-card"><span class="feat-icon">🎁</span><div class="feat-title">تغليف فاخر</div><p class="feat-desc">أوعية زجاجية مميزة مناسبة للاستخدام والإهداء</p></div>
-      <div class="feat-card"><span class="feat-icon">📞</span><div class="feat-title">دعم متواصل</div><p class="feat-desc">خدمة عملاء متاحة 7 أيام لمساعدتك</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="sec-test">
-  <div class="sec-inner">
-    <div class="sec-head">
-      <span class="sec-tag">آراء العملاء</span>
-      <h2 class="sec-title">ماذا يقول زبائننا</h2>
-    </div>
-    <div class="test-grid">
-      <div class="tcard"><span class="tq">"</span><p class="ttxt">عسل ممتاز جداً، النكهة رائعة والجودة واضحة. سأطلب مرة ثانية بالتأكيد!</p><div class="tauth"><div class="tav">أ</div><div><div class="tname">أحمد الكاظمي</div><div class="tcity">بغداد ⭐⭐⭐⭐⭐</div></div></div></div>
-      <div class="tcard"><span class="tq">"</span><p class="ttxt">اشتريت عسل السدر لوالدتي وكانت سعيدة جداً، التوصيل كان سريع والتغليف أنيق</p><div class="tauth"><div class="tav">م</div><div><div class="tname">محمد الربيعي</div><div class="tcity">النجف ⭐⭐⭐⭐⭐</div></div></div></div>
-      <div class="tcard"><span class="tq">"</span><p class="ttxt">أفضل عسل جربته، الطعم طبيعي وليس مصنع. أنصح به بشدة لكل من يبحث عن الجودة</p><div class="tauth"><div class="tav">ز</div><div><div class="tname">زينب العلوي</div><div class="tcity">كربلاء ⭐⭐⭐⭐⭐</div></div></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="sec-contact">
-  <div class="sec-inner">
-    <div class="sec-head">
-      <span class="sec-tag">تواصل معنا</span>
-      <h2 class="sec-title">نحن هنا لمساعدتك</h2>
-    </div>
-    <div class="contact-wrap">
-      <div class="cinfo">
-        <div class="citem"><span class="citem-icon">📍</span><div><div class="citem-lbl">الموقع</div><div class="citem-val">النجف الأشرف، العراق</div></div></div>
-        <div class="citem"><span class="citem-icon">📞</span><div><div class="citem-lbl">الهاتف</div><div class="citem-val" dir="ltr">07811113435</div></div></div>
-        <div class="citem"><span class="citem-icon">⏰</span><div><div class="citem-lbl">أوقات العمل</div><div class="citem-val">9 صباحاً — 10 مساءً</div></div></div>
-        <a href="https://wa.me/9647811113435" class="wa-btn" target="_blank">💬 تواصل عبر واتساب</a>
-      </div>
-      <div class="cform">
-        <div style="font-size:15px;font-weight:900;margin-bottom:4px">أرسل استفساراتك</div>
-        <input class="finp" type="text" id="cf-name" placeholder="الاسم الكامل">
-        <input class="finp" type="tel" id="cf-phone" placeholder="رقم الهاتف">
-        <textarea class="finp" id="cf-msg" rows="4" placeholder="رسالتك..."></textarea>
-        <button class="btn-prim" style="width:100%;padding:13px;font-size:14px;border-radius:12px" onclick="sendMsg()">إرسال الرسالة</button>
+<!-- STORE -->
+<div id="store">
+  <header>
+    <div class="hlogo" onclick="goTo('#hero')">
+      <span class="hlogo-icon">🍯</span>
+      <div>
+        <div class="hlogo-name">عسل در النجف</div>
+        <div class="hlogo-sub">منتجات طبيعية أصيلة</div>
       </div>
     </div>
-  </div>
-</section>
+    <div class="hnav">
+      <button class="hnav-link" onclick="goTo('#sec-prods')">المنتجات</button>
+      <button class="hnav-link" onclick="goTo('#sec-contact')">تواصل</button>
+      <button class="cart-fab" onclick="toggleCart()">
+        🛒 <span class="cbadge" id="cbadge">0</span>
+      </button>
+    </div>
+  </header>
 
-<footer>
-  <div class="flogo">🍯 عسل در النجف</div>
-  <div class="fsub">أجود العسل الطبيعي من النجف الأشرف</div>
-  <div class="flinks">
-    <span class="flink" onclick="goTo('#hero')">الرئيسية</span>
-    <span class="flink" onclick="goTo('#sec-prods')">المنتجات</span>
-    <span class="flink" onclick="goTo('#sec-feat')">مميزاتنا</span>
-    <span class="flink" onclick="goTo('#sec-contact')">التواصل</span>
+  <section id="hero">
+    <div class="hero-glow"></div>
+    <div class="hive-bg"></div>
+    <div class="hero-chip">🌿 أجود العسل الطبيعي من النجف الأشرف</div>
+    <h1 class="hero-h1">عسل طبيعي<em>أصيل ونقي</em></h1>
+    <p class="hero-p">نقدم لكم أجود أنواع العسل الطبيعي المستخرج بعناية من مناحل محلية معتمدة</p>
+    <div class="hero-btns">
+      <button class="btn-gold" onclick="goTo('#sec-prods')">🛒 تسوّق الآن</button>
+      <button class="btn-out" onclick="goTo('#sec-feat')">اعرف أكثر</button>
+    </div>
+    <div class="hero-nums">
+      <div class="hnum"><span class="hnum-val" id="h-prods">—</span><span class="hnum-lbl">منتج متوفر</span></div>
+      <div class="hnum"><span class="hnum-val">5 ★</span><span class="hnum-lbl">تقييم العملاء</span></div>
+      <div class="hnum"><span class="hnum-val">+500</span><span class="hnum-lbl">زبون راضٍ</span></div>
+    </div>
+    <div class="scroll-hint"><span>تصفّح</span><div class="scroll-line"></div></div>
+  </section>
+
+  <section id="sec-cats">
+    <div class="sec-in">
+      <div class="sec-head">
+        <span class="sec-tag">تصفح حسب النوع</span>
+        <h2 class="sec-title">اختر ما يناسبك</h2>
+      </div>
+      <div class="cats-wrap" id="cats-wrap"></div>
+    </div>
+  </section>
+
+  <section id="sec-prods">
+    <div class="sec-in">
+      <div class="sec-head">
+        <span class="sec-tag">منتجاتنا</span>
+        <h2 class="sec-title">تشكيلة العسل الفاخر</h2>
+        <p class="sec-sub">كل منتج مستخرج بعناية وجودته مضمونة</p>
+      </div>
+      <div class="filter-row">
+        <div class="sbox">
+          <span style="color:var(--mute)">🔍</span>
+          <input type="text" placeholder="ابحث عن منتج..." id="sinp" oninput="filterP()">
+        </div>
+        <select class="srt-sel" id="srtsel" onchange="filterP()">
+          <option value="def">الترتيب الافتراضي</option>
+          <option value="pa">السعر: من الأقل</option>
+          <option value="pd">السعر: من الأعلى</option>
+        </select>
+      </div>
+      <div class="prods-grid" id="prods-grid"></div>
+    </div>
+  </section>
+
+  <section id="sec-feat">
+    <div class="sec-in">
+      <div class="sec-head">
+        <span class="sec-tag">لماذا نحن؟</span>
+        <h2 class="sec-title">مميزاتنا</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card"><span class="feat-icon">🌿</span><div class="feat-title">طبيعي 100%</div><p class="feat-desc">عسل خالص بدون إضافات</p></div>
+        <div class="feat-card"><span class="feat-icon">🔬</span><div class="feat-title">جودة مختبرة</div><p class="feat-desc">فحص مخبري لكل دفعة</p></div>
+        <div class="feat-card"><span class="feat-icon">🚚</span><div class="feat-title">توصيل لكل العراق</div><p class="feat-desc">خلال 24-48 ساعة</p></div>
+        <div class="feat-card"><span class="feat-icon">💯</span><div class="feat-title">ضمان الجودة</div><p class="feat-desc">استبدال أو استرداد المبلغ</p></div>
+        <div class="feat-card"><span class="feat-icon">🎁</span><div class="feat-title">تغليف فاخر</div><p class="feat-desc">مناسب للاستخدام والإهداء</p></div>
+        <div class="feat-card"><span class="feat-icon">📞</span><div class="feat-title">دعم متواصل</div><p class="feat-desc">خدمة عملاء 7 أيام</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sec-contact">
+    <div class="sec-in">
+      <div class="sec-head">
+        <span class="sec-tag">تواصل معنا</span>
+        <h2 class="sec-title">نحن هنا لمساعدتك</h2>
+      </div>
+      <div class="contact-wrap">
+        <div class="cinfo">
+          <div class="citem"><span class="citem-icon">📍</span><div><div class="citem-lbl">الموقع</div><div class="citem-val">النجف الأشرف، العراق</div></div></div>
+          <div class="citem"><span class="citem-icon">📞</span><div><div class="citem-lbl">الهاتف</div><div class="citem-val" dir="ltr">07811113435</div></div></div>
+          <div class="citem"><span class="citem-icon">⏰</span><div><div class="citem-lbl">أوقات العمل</div><div class="citem-val">9 صباحاً — 10 مساءً</div></div></div>
+          <a href="https://wa.me/9647811113435" class="wa-btn" target="_blank">💬 تواصل عبر واتساب</a>
+        </div>
+        <div class="cform">
+          <div style="font-size:15px;font-weight:900;margin-bottom:4px">أرسل استفساراتك</div>
+          <input class="finp" type="text" id="cf-name" placeholder="الاسم الكامل">
+          <input class="finp" type="tel" id="cf-phone" placeholder="رقم الهاتف">
+          <textarea class="finp" id="cf-msg" rows="4" placeholder="رسالتك..."></textarea>
+          <button class="btn-gold" style="width:100%;padding:13px;font-size:14px;border-radius:12px" onclick="sendMsg()">إرسال الرسالة</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="flogo">🍯 عسل در النجف</div>
+    <div class="fsub">أجود العسل الطبيعي من النجف الأشرف</div>
+    <div class="flinks">
+      <span class="flink" onclick="goTo('#hero')">الرئيسية</span>
+      <span class="flink" onclick="goTo('#sec-prods')">المنتجات</span>
+      <span class="flink" onclick="goTo('#sec-feat')">مميزاتنا</span>
+      <span class="flink" onclick="goTo('#sec-contact')">التواصل</span>
+      <span class="flink" onclick="openAdminLogin()" style="color:var(--dim)">⚙ المالك</span>
+    </div>
+    <div class="fcopy">© 2025 عسل در النجف</div>
+  </footer>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin">
+  <div class="adm-hdr">
+    <div class="adm-title">🛡️ لوحة التحكم — عسل در النجف</div>
+    <button class="adm-exit" onclick="exitAdmin()">← للمتجر</button>
   </div>
-  <div class="fcopy">© 2025 عسل در النجف — جميع الحقوق محفوظة</div>
-</footer>
+  <div class="adm-in">
+    <div class="adm-tabs">
+      <button class="adm-tab on" onclick="admTab('products')">📦 المنتجات</button>
+      <button class="adm-tab" onclick="admTab('add')">➕ إضافة منتج</button>
+      <button class="adm-tab" onclick="admTab('stats')">📊 الإحصائيات</button>
+      <button class="adm-tab" onclick="admTab('settings')">⚙ الإعدادات</button>
+    </div>
+    <!-- PRODUCTS TAB -->
+    <div id="adm-products">
+      <div class="adm-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="adm-card-title" style="margin:0">قائمة المنتجات</div>
+          <input type="text" class="ainp" placeholder="🔍 بحث..." id="adm-srch" oninput="filterAdmProds()" style="max-width:180px">
+        </div>
+        <div id="adm-prods-list"></div>
+      </div>
+    </div>
+    <!-- ADD PRODUCT TAB -->
+    <div id="adm-add" style="display:none">
+      <div class="adm-card">
+        <div class="adm-card-title" id="add-form-title">➕ إضافة منتج جديد</div>
+        <input type="hidden" id="edit-prod-id">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div>
+            <div class="albl">اسم المنتج *</div>
+            <input class="ainp" id="pf-name" placeholder="مثال: عسل السدر الأصيل">
+          </div>
+          <div>
+            <div class="albl">الوصف</div>
+            <textarea class="ainp" id="pf-desc" rows="3" placeholder="وصف المنتج..." style="resize:none;line-height:1.6"></textarea>
+          </div>
+          <div class="g2">
+            <div>
+              <div class="albl">السعر (د.ع) *</div>
+              <input class="ainp" type="number" id="pf-price" placeholder="0">
+            </div>
+            <div>
+              <div class="albl">الوزن / الحجم</div>
+              <input class="ainp" id="pf-weight" placeholder="مثال: 1 كغم">
+            </div>
+          </div>
+          <div class="g2">
+            <div>
+              <div class="albl">الكمية المتوفرة</div>
+              <input class="ainp" type="number" id="pf-qty" placeholder="0">
+            </div>
+            <div>
+              <div class="albl">الفئة</div>
+              <select class="ainp" id="pf-cat">
+                <option value="عام">عام</option>
+                <option value="سدر">سدر</option>
+                <option value="جبلي">جبلي</option>
+                <option value="أزهار">أزهار</option>
+                <option value="غذاء ملكي">غذاء ملكي</option>
+                <option value="حبة سوداء">حبة سوداء</option>
+                <option value="خلطات">خلطات</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="albl">شارة / بادج (اختياري)</div>
+            <input class="ainp" id="pf-badge" placeholder="مثال: الأكثر مبيعاً، جديد، فاخر">
+          </div>
+          <div>
+            <div class="albl">أيقونة المنتج</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+              <div id="pf-emoji-preview" style="font-size:36px;background:var(--dark);border-radius:10px;padding:8px;min-width:52px;text-align:center">🍯</div>
+              <input class="ainp" id="pf-emoji" value="🍯" placeholder="🍯" style="flex:1" oninput="document.getElementById('pf-emoji-preview').textContent=this.value||'🍯'">
+            </div>
+            <div class="emoji-grid">
+              <span class="emoji-opt sel" onclick="setEmoji('🍯')">🍯</span>
+              <span class="emoji-opt" onclick="setEmoji('🫙')">🫙</span>
+              <span class="emoji-opt" onclick="setEmoji('🌿')">🌿</span>
+              <span class="emoji-opt" onclick="setEmoji('🌻')">🌻</span>
+              <span class="emoji-opt" onclick="setEmoji('✨')">✨</span>
+              <span class="emoji-opt" onclick="setEmoji('🖤')">🖤</span>
+              <span class="emoji-opt" onclick="setEmoji('💛')">💛</span>
+              <span class="emoji-opt" onclick="setEmoji('🍊')">🍊</span>
+              <span class="emoji-opt" onclick="setEmoji('🌲')">🌲</span>
+              <span class="emoji-opt" onclick="setEmoji('⛰️')">⛰️</span>
+              <span class="emoji-opt" onclick="setEmoji('👑')">👑</span>
+              <span class="emoji-opt" onclick="setEmoji('🌹')">🌹</span>
+              <span class="emoji-opt" onclick="setEmoji('🌸')">🌸</span>
+              <span class="emoji-opt" onclick="setEmoji('🍋')">🍋</span>
+              <span class="emoji-opt" onclick="setEmoji('🌶️')">🌶️</span>
+              <span class="emoji-opt" onclick="setEmoji('🫚')">🫚</span>
+            </div>
+          </div>
+          <div id="pf-err" style="display:none;font-size:12px;color:#ef4444;padding:9px;background:#1a0505;border-radius:9px"></div>
+          <div id="pf-ok" style="display:none;font-size:12px;color:#22c55e;padding:9px;background:#052e16;border-radius:9px"></div>
+          <div style="display:flex;gap:9px">
+            <button class="abtn" style="flex:1;padding:13px;font-size:14px" id="save-prod-btn" onclick="saveProd()">حفظ المنتج</button>
+            <button onclick="resetForm()" style="flex:1;padding:13px;font-size:14px;background:var(--dark);border:1px solid rgba(200,148,58,.2);color:var(--mute);font-family:Cairo,sans-serif;font-weight:700;border-radius:10px;cursor:pointer">إلغاء</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- STATS TAB -->
+    <div id="adm-stats" style="display:none">
+      <div class="stat-grid" id="stats-grid"></div>
+      <div class="adm-card">
+        <div class="adm-card-title">المنتجات الأقل مخزوناً</div>
+        <div id="low-stock-list"></div>
+      </div>
+    </div>
+    <!-- SETTINGS TAB -->
+    <div id="adm-settings" style="display:none">
+      <div class="adm-card">
+        <div class="adm-card-title">تغيير كلمة مرور المالك</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <input class="ainp" type="password" id="new-pw" placeholder="كلمة المرور الجديدة">
+          <input class="ainp" type="password" id="new-pw2" placeholder="تأكيد كلمة المرور">
+          <div id="pw-msg" style="display:none;font-size:12px;padding:8px;border-radius:8px"></div>
+          <button class="abtn" style="padding:12px" onclick="changeAdmPw()">حفظ كلمة المرور</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- CART -->
-<div id="cart-ov" onclick="handleCartClick(event)">
+<div id="cart-ov" onclick="handleCartOv(event)">
   <div id="cart-side">
     <div class="cs-head">
       <span class="cs-title">🛒 سلة التسوق</span>
@@ -343,8 +523,8 @@ footer{background:var(--dark3);border-top:1px solid rgba(200,148,58,.1);padding:
 </div>
 
 <!-- PRODUCT MODAL -->
-<div id="prod-ov" onclick="handleProdOvClick(event)">
-  <div id="prod-modal" style="position:relative">
+<div id="prod-ov" onclick="handleProdOv(event)">
+  <div id="prod-modal">
     <button class="pm-close" onclick="closePM()">✕</button>
     <div class="pm-handle"></div>
     <div id="pm-content"></div>
@@ -354,108 +534,119 @@ footer{background:var(--dark3);border-top:1px solid rgba(200,148,58,.1);padding:
 <div id="toast"></div>
 
 <script>
-var WA = "9647811113435";
+var SURL="https://kffnbyevvrozemloovvy.supabase.co";
+var SKEY="sb_publishable_M8qhgvBV_3lSdc3L8lv4Eg_C9kO3e62";
+var sb=supabase.createClient(SURL,SKEY);
+var WA="9647811113435";
+var ADM_PW_KEY="honey_adm_pw_v1";
+var products=[],cart=[],activeCat="all",searchQ="",sortV="def";
+var curProd=null;
 
-var CATS = [
-  {id:"all",name:"الكل",icon:"🍯"},
-  {id:"sidr",name:"سدر",icon:"🌿"},
-  {id:"mountain",name:"جبلي",icon:"⛰️"},
-  {id:"flower",name:"أزهار",icon:"🌸"},
-  {id:"royal",name:"غذاء ملكي",icon:"👑"},
-  {id:"black",name:"حبة سوداء",icon:"🖤"},
-  {id:"mix",name:"خلطات",icon:"✨"},
-];
-
-var PRODS = [
-  {id:1,name:"عسل السدر الأصيل",desc:"من أجود أنواع العسل، يُستخرج من أزهار شجر السدر في البراري الطبيعية. غني بالمعادن والفيتامينات وله خصائص علاجية رائعة.",icon:"🍯",price:25000,unit:"كغم",badge:"الأكثر مبيعاً",cat:"sidr",rating:5,reviews:128},
-  {id:2,name:"عسل الجبال الطبيعي",desc:"مجموع من أعالي الجبال على ارتفاعات عالية بعيداً عن التلوث. نكهة قوية ومميزة تميزه عن غيره.",icon:"🫙",price:20000,unit:"كغم",badge:null,cat:"mountain",rating:4.8,reviews:86},
-  {id:3,name:"عسل الزهور المتعدد",desc:"خليط رائع من رحيق أزهار متعددة يمنحه نكهة فريدة وفوائد متعددة للجسم والمناعة.",icon:"🌻",price:18000,unit:"كغم",badge:"جديد",cat:"flower",rating:4.7,reviews:64},
-  {id:4,name:"غذاء ملكي طازج",desc:"الغذاء الملكي النقي المستخرج مباشرة من الخلية. مقوي طبيعي رائع للطاقة والمناعة.",icon:"✨",price:35000,unit:"100غم",badge:"فاخر",cat:"royal",rating:5,reviews:42},
-  {id:5,name:"عسل الحبة السوداء",desc:"مزيج فريد من العسل الطبيعي وزيت الحبة السوداء. علاج طبيعي معروف منذ القدم بفوائده العديدة.",icon:"🖤",price:22000,unit:"كغم",badge:null,cat:"black",rating:4.9,reviews:95},
-  {id:6,name:"عسل السدر الجبلي",desc:"الجمع بين طعم السدر الأصيل والمحيط الجبلي النقي يمنحه خصائص علاجية فائقة.",icon:"💛",price:30000,unit:"كغم",badge:"مميز",cat:"sidr",rating:5,reviews:156},
-  {id:7,name:"عسل أزهار البرتقال",desc:"من مناحل تجاور بساتين البرتقال. نكهة زهرية خفيفة ورائحة أخاذة.",icon:"🍊",price:16000,unit:"كغم",badge:null,cat:"flower",rating:4.6,reviews:38},
-  {id:8,name:"خلطة العسل والزنجبيل",desc:"خلطة طبيعية فريدة من العسل النقي والزنجبيل الطازج. دافئة ومقوية للمناعة.",icon:"🌶️",price:19000,unit:"500غم",badge:null,cat:"mix",rating:4.7,reviews:51},
-  {id:9,name:"عسل الغابات الطبيعي",desc:"من غابات كثيفة بعيدة عن التلوث. داكن اللون قوي النكهة غني بمضادات الأكسدة.",icon:"🌲",price:21000,unit:"كغم",badge:null,cat:"mountain",rating:4.7,reviews:44},
-  {id:10,name:"عسل السدر الملكي",desc:"أعلى درجات عسل السدر جودةً ونقاءً. يُجمع يدوياً من مناحل خاصة مختارة بعناية.",icon:"👑",price:45000,unit:"كغم",badge:"حصري",cat:"royal",rating:5,reviews:73},
-];
-
-var cart=[], activeCat="all", searchQ="", sortV="def";
+function hp(p){var h=0;for(var i=0;i<p.length;i++)h=(Math.imul(31,h)+p.charCodeAt(i))|0;return"h"+Math.abs(h).toString(36)+p.length;}
+function getAdmPw(){return localStorage.getItem(ADM_PW_KEY)||hp("admin1234");}
 
 function goTo(sel){var el=document.querySelector(sel);if(el)el.scrollIntoView({behavior:"smooth"});}
 function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2200);}
+function $(id){return document.getElementById(id);}
 
-// CATS
-function renderCats(){
-  var el=document.getElementById("cats-wrap");
-  el.innerHTML=CATS.map(function(c){
-    return '<div class="cat-pill'+(c.id===activeCat?" on":"")+'" onclick="setCat(''+c.id+'')">'+
-      '<span class="ci">'+c.icon+'</span><span class="cn">'+c.name+'</span></div>';
-  }).join("");
+// LOAD PRODUCTS
+async function loadProducts(){
+  var r=await sb.from("products").select("*").eq("active",true).order("created_at",{ascending:false});
+  products=r.data||[];
+  renderCats();renderProds();
+  var hp_el=$("h-prods");if(hp_el)hp_el.textContent=products.length;
+  $("loading").style.display="none";
 }
-function setCat(id){activeCat=id;renderCats();renderProds();}
-renderCats();
+
+// CATEGORIES
+function getCats(){
+  var cats=["all"];
+  products.forEach(function(p){if(p.category&&!cats.includes(p.category))cats.push(p.category);});
+  return cats;
+}
+var catIcons={"all":"🍯","سدر":"🌿","جبلي":"⛰️","أزهار":"🌸","غذاء ملكي":"👑","حبة سوداء":"🖤","خلطات":"✨","عام":"🫙"};
+function renderCats(){
+  var cats=getCats();
+  var el=$("cats-wrap");el.innerHTML="";
+  cats.forEach(function(c){
+    var d=document.createElement("div");d.className="cat-pill"+(c===activeCat?" on":"");
+    d.innerHTML='<span class="ci">'+(catIcons[c]||"🍯")+'</span><span class="cn">'+(c==="all"?"الكل":c)+'</span>';
+    (function(cat){d.addEventListener("click",function(){activeCat=cat;renderCats();renderProds();});})(c);
+    el.appendChild(d);
+  });
+}
 
 // PRODUCTS
-function filterP(){
-  searchQ=document.getElementById("sinp").value.trim().toLowerCase();
-  sortV=document.getElementById("srtsel").value;
-  renderProds();
-}
+function filterP(){searchQ=$("sinp").value.trim().toLowerCase();sortV=$("srtsel").value;renderProds();}
 function renderProds(){
-  var list=PRODS.filter(function(p){
-    var mc=activeCat==="all"||p.cat===activeCat;
-    var ms=!searchQ||p.name.toLowerCase().includes(searchQ)||p.desc.toLowerCase().includes(searchQ);
+  var list=products.filter(function(p){
+    var mc=activeCat==="all"||p.category===activeCat;
+    var ms=!searchQ||p.name.toLowerCase().includes(searchQ)||(p.description||"").toLowerCase().includes(searchQ);
     return mc&&ms;
   });
   if(sortV==="pa")list.sort(function(a,b){return a.price-b.price;});
   else if(sortV==="pd")list.sort(function(a,b){return b.price-a.price;});
-  var el=document.getElementById("prods-grid");
-  if(!list.length){el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mute)"><div style="font-size:48px;margin-bottom:10px">🔍</div>لا توجد منتجات مطابقة</div>';return;}
-  el.innerHTML=list.map(function(p){
-    var stars="★".repeat(Math.floor(p.rating))+(p.rating%1>=0.5?"½":"");
-    return '<div class="pcard" onclick="openProd('+p.id+')">'+
-      '<div class="pcard-img">'+p.icon+(p.badge?'<span class="pcard-badge">'+p.badge+'</span>':'')+'</div>'+
+  var el=$("prods-grid");el.innerHTML="";
+  if(!list.length){
+    el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mute)"><div style="font-size:48px;margin-bottom:10px">🔍</div>لا توجد منتجات مطابقة</div>';
+    return;
+  }
+  list.forEach(function(p){
+    var outOfStock=p.quantity===0;
+    var card=document.createElement("div");card.className="pcard";
+    card.innerHTML=
+      '<div class="pcard-img">'+p.emoji+
+      (p.badge?'<span class="pcard-badge">'+p.badge+'</span>':'')+
+      (outOfStock?'<span class="pcard-out">نفذت الكمية</span>':'')+
+      '</div>'+
       '<div class="pcard-body">'+
-      '<div class="pcard-stars">'+stars+' <span style="font-size:10px;color:var(--mute)">('+p.reviews+')</span></div>'+
       '<div class="pcard-name">'+p.name+'</div>'+
+      (p.weight?'<div class="pcard-weight">'+p.weight+'</div>':'')+
       '<div class="pcard-foot">'+
-      '<div class="pcard-price">'+p.price.toLocaleString()+' <small>د.ع/'+p.unit+'</small></div>'+
-      '<button class="add-btn" onclick="addToCart(event,'+p.id+')">+ أضف</button>'+
-      '</div></div></div>';
-  }).join("");
+      '<div class="pcard-price">'+p.price.toLocaleString()+' <small style="font-size:9px;color:var(--mute)">د.ع</small></div>'+
+      '<button class="add-btn"'+(outOfStock?' disabled':'')+'>'+(outOfStock?'نفذ':'+ أضف')+'</button>'+
+      '</div></div>';
+    card.querySelector(".pcard-img").addEventListener("click",function(){openProd(p.id);});
+    card.querySelector(".pcard-name").addEventListener("click",function(){openProd(p.id);});
+    var addB=card.querySelector(".add-btn");
+    if(!outOfStock)(function(pid){addB.addEventListener("click",function(e){e.stopPropagation();addToCart(pid);});})(p.id);
+    el.appendChild(card);
+  });
 }
-renderProds();
 
 // PRODUCT MODAL
 function openProd(id){
-  var p=PRODS.find(function(x){return x.id===id;});if(!p)return;
-  var stars="★".repeat(Math.floor(p.rating))+(p.rating%1>=0.5?"½":"");
-  document.getElementById("pm-content").innerHTML=
-    '<div class="pm-icon">'+p.icon+'</div>'+
-    '<div class="pm-name">'+p.name+'</div>'+
-    '<div class="pm-stars">'+stars+' <span style="font-size:11px;color:var(--mute)">('+p.reviews+' تقييم)</span></div>'+
-    '<div class="pm-desc">'+p.desc+'</div>'+
-    '<div class="pm-price">'+p.price.toLocaleString()+' <small>د.ع / '+p.unit+'</small></div>'+
-    '<div class="pm-feats">'+
-    '<div class="pm-feat"><span class="fi">🌿</span><div class="ft">طبيعي 100%</div></div>'+
-    '<div class="pm-feat"><span class="fi">✅</span><div class="ft">جودة مضمونة</div></div>'+
-    '<div class="pm-feat"><span class="fi">🚚</span><div class="ft">توصيل سريع</div></div>'+
-    '<div class="pm-feat"><span class="fi">💯</span><div class="ft">ضمان الرضا</div></div>'+
-    '</div>'+
-    '<button class="pm-add" onclick="addToCart(event,'+p.id+');closePM()">🛒 أضف إلى السلة</button>';
-  document.getElementById("prod-ov").classList.add("open");
-  document.body.style.overflow="hidden";
+  curProd=products.find(function(p){return p.id===id;});if(!curProd)return;
+  var outOfStock=curProd.quantity===0;
+  $("pm-content").innerHTML=
+    '<div class="pm-icon">'+curProd.emoji+'</div>'+
+    '<div class="pm-name">'+curProd.name+'</div>'+
+    (curProd.weight?'<div class="pm-weight">'+curProd.weight+'</div>':'')+
+    (curProd.description?'<div class="pm-desc">'+curProd.description+'</div>':'')+
+    '<div class="pm-price">'+curProd.price.toLocaleString()+' <small>د.ع</small></div>'+
+    '<div class="pm-stock" style="color:'+(outOfStock?"#ef4444":"#22c55e")+'">'+(outOfStock?"❌ نفذت الكمية":"✅ متوفر — الكمية: "+curProd.quantity)+'</div>'+
+    '<div class="pm-feats"><div class="pm-feat"><span class="fi">🌿</span><div class="ft">طبيعي 100%</div></div><div class="pm-feat"><span class="fi">✅</span><div class="ft">جودة مضمونة</div></div><div class="pm-feat"><span class="fi">🚚</span><div class="ft">توصيل سريع</div></div><div class="pm-feat"><span class="fi">💯</span><div class="ft">ضمان الرضا</div></div></div>'+
+    '<button class="pm-add"'+(outOfStock?' disabled':'')+' id="pm-add-btn">'+(outOfStock?'نفذت الكمية':'🛒 أضف إلى السلة')+'</button>';
+  if(!outOfStock){
+    document.getElementById("pm-add-btn").addEventListener("click",function(){
+      addToCart(curProd.id);closePM();
+    });
+  }
+  $("prod-ov").classList.add("open");document.body.style.overflow="hidden";
 }
-function closePM(){document.getElementById("prod-ov").classList.remove("open");document.body.style.overflow="";}
-function handleProdOvClick(e){if(e.target===document.getElementById("prod-ov"))closePM();}
+function closePM(){$("prod-ov").classList.remove("open");document.body.style.overflow="";}
+function handleProdOv(e){if(e.target===$("prod-ov"))closePM();}
 
 // CART
-function addToCart(e,id){
-  if(e)e.stopPropagation();
-  var p=PRODS.find(function(x){return x.id===id;});if(!p)return;
+function addToCart(id){
+  var p=products.find(function(x){return x.id===id;});if(!p)return;
   var item=cart.find(function(c){return c.id===id;});
-  if(item)item.qty++;
-  else cart.push({id:p.id,name:p.name,icon:p.icon,price:p.price,unit:p.unit,qty:1});
+  if(item){
+    if(item.qty>=p.quantity){showToast("⚠ لا تتوفر كمية أكثر");return;}
+    item.qty++;
+  }else{
+    cart.push({id:p.id,name:p.name,emoji:p.emoji,price:p.price,weight:p.weight,qty:1,maxQty:p.quantity});
+  }
   updCart();showToast("✓ تمت الإضافة: "+p.name);
 }
 function rmFromCart(id){cart=cart.filter(function(c){return c.id!==id;});updCart();}
@@ -463,36 +654,37 @@ function chgQty(id,d){
   var item=cart.find(function(c){return c.id===id;});if(!item)return;
   item.qty+=d;
   if(item.qty<=0)rmFromCart(id);
+  else if(item.qty>item.maxQty){item.qty=item.maxQty;showToast("⚠ الكمية القصوى المتاحة: "+item.maxQty);}
   else updCart();
 }
 function updCart(){
   var total=cart.reduce(function(a,c){return a+c.qty;},0);
-  document.getElementById("cbadge").textContent=total;
+  $("cbadge").textContent=total;
   renderCart();
 }
 function toggleCart(){
-  document.getElementById("cart-ov").classList.toggle("open");
-  document.body.style.overflow=document.getElementById("cart-ov").classList.contains("open")?"hidden":"";
+  $("cart-ov").classList.toggle("open");
+  document.body.style.overflow=$("cart-ov").classList.contains("open")?"hidden":"";
 }
-function handleCartClick(e){if(e.target===document.getElementById("cart-ov"))toggleCart();}
+function handleCartOv(e){if(e.target===$("cart-ov"))toggleCart();}
 function renderCart(){
-  var el=document.getElementById("cs-items"),ft=document.getElementById("cs-foot");
+  var el=$("cs-items"),ft=$("cs-foot");
   if(!cart.length){
-    el.innerHTML='<div class="cs-empty"><div style="font-size:52px;margin-bottom:10px">🛒</div><div>السلة فارغة</div><div style="font-size:11px;margin-top:5px;color:var(--dim)">أضف منتجات لتبدأ التسوق</div></div>';
+    el.innerHTML='<div class="cs-empty"><div style="font-size:52px;margin-bottom:10px">🛒</div><div>السلة فارغة</div></div>';
     ft.innerHTML="";return;
   }
   el.innerHTML=cart.map(function(item){
     return '<div class="ci-card">'+
-      '<div class="ci-icon">'+item.icon+'</div>'+
+      '<div class="ci-icon">'+item.emoji+'</div>'+
       '<div style="flex:1;min-width:0">'+
-      '<div class="ci-name">'+item.name+'</div>'+
+      '<div class="ci-name">'+item.name+(item.weight?" ("+item.weight+")":"")+'</div>'+
       '<div class="ci-price">'+(item.price*item.qty).toLocaleString()+' د.ع</div>'+
       '<div class="ci-qty">'+
-      '<button class="qbtn" onclick="chgQty('+item.id+',-1)">−</button>'+
+      '<button class="qbtn" onclick="chgQty(''+item.id+'',-1)">−</button>'+
       '<span class="qnum">'+item.qty+'</span>'+
-      '<button class="qbtn" onclick="chgQty('+item.id+',1)">+</button>'+
+      '<button class="qbtn" onclick="chgQty(''+item.id+'',1)">+</button>'+
       '</div></div>'+
-      '<button class="ci-rm" onclick="rmFromCart('+item.id+')">🗑</button>'+
+      '<button class="ci-rm" onclick="rmFromCart(''+item.id+'')">🗑</button>'+
       '</div>';
   }).join("");
   var total=cart.reduce(function(a,c){return a+c.price*c.qty;},0);
@@ -503,29 +695,169 @@ function renderCart(){
 function checkout(){
   if(!cart.length)return;
   var msg="طلب جديد من متجر عسل در النجف:%0A%0A";
-  cart.forEach(function(item){msg+="• "+item.name+" × "+item.qty+" = "+(item.price*item.qty).toLocaleString()+" د.ع%0A";});
+  cart.forEach(function(item){msg+="• "+item.name+(item.weight?" ("+item.weight+")":"")+" × "+item.qty+" = "+(item.price*item.qty).toLocaleString()+" د.ع%0A";});
   var total=cart.reduce(function(a,c){return a+c.price*c.qty;},0);
-  msg+="%0Aالإجمالي: "+total.toLocaleString()+" د.ع";
+  msg+="%0Aالإجمالي: "+total.toLocaleString()+" د.ع%0A%0Aأرجو التواصل لتأكيد الطلب";
   window.open("https://wa.me/"+WA+"?text="+msg,"_blank");
 }
+
 function sendMsg(){
-  var nm=document.getElementById("cf-name").value.trim();
-  var ph=document.getElementById("cf-phone").value.trim();
-  var msg=document.getElementById("cf-msg").value.trim();
+  var nm=$("cf-name").value.trim(),ph=$("cf-phone").value.trim(),msg=$("cf-msg").value.trim();
   if(!nm||!msg){showToast("⚠ يرجى ملء الحقول المطلوبة");return;}
-  var waMsg="رسالة من: "+nm+(ph?" — "+ph:"")+"%0A"+msg;
-  window.open("https://wa.me/"+WA+"?text="+waMsg,"_blank");
+  var waMsg="رسالة من: "+nm+(ph?" — "+ph:"")+"%0A%0A"+msg;
+  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(waMsg),"_blank");
 }
 
-// Header scroll
-window.addEventListener("scroll",function(){
-  document.querySelector("header").style.boxShadow=window.scrollY>40?"0 4px 20px rgba(0,0,0,.5)":"none";
-});
+// ADMIN
+function openAdminLogin(){$("adm-login-screen").classList.add("open");$("adm-pw").value="";}
+function closeAdminLogin(){$("adm-login-screen").classList.remove("open");}
+function doAdmLogin(){
+  var pw=$("adm-pw").value;
+  if(hp(pw)!==getAdmPw()){
+    $("adm-pw-err").textContent="كلمة المرور غير صحيحة";$("adm-pw-err").style.display="block";
+    setTimeout(function(){$("adm-pw-err").style.display="none";},3000);return;
+  }
+  $("adm-login-screen").classList.remove("open");
+  $("store").style.display="none";$("admin").style.display="block";
+  admTab("products");loadAdmProducts();
+}
+function exitAdmin(){$("admin").style.display="none";$("store").style.display="block";loadProducts();}
 
-// Swipe modal
+function admTab(t){
+  ["products","add","stats","settings"].forEach(function(s){$("adm-"+s).style.display=s===t?"block":"none";});
+  document.querySelectorAll(".adm-tab").forEach(function(b,i){b.classList.toggle("on",["products","add","stats","settings"][i]===t);});
+  if(t==="stats")loadStats();
+}
+
+// ADMIN PRODUCTS
+var allAdmProds=[];
+async function loadAdmProducts(){
+  var r=await sb.from("products").select("*").order("created_at",{ascending:false});
+  allAdmProds=r.data||[];
+  renderAdmProds();
+}
+function filterAdmProds(){
+  var q=($("adm-srch")||{value:""}).value.trim().toLowerCase();
+  var list=q?allAdmProds.filter(function(p){return p.name.toLowerCase().includes(q);}):allAdmProds;
+  renderAdmProds(list);
+}
+function renderAdmProds(list){
+  var prods=list||allAdmProds;
+  var el=$("adm-prods-list");el.innerHTML="";
+  if(!prods.length){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--mute)">لا توجد منتجات. أضف أول منتج!</div>';return;}
+  prods.forEach(function(p){
+    var row=document.createElement("div");row.className="prod-row";
+    if(!p.active)row.style.opacity="0.5";
+    row.innerHTML=
+      '<div class="prod-row-icon">'+p.emoji+'</div>'+
+      '<div class="prod-row-info">'+
+      '<div class="prod-row-name">'+p.name+(p.badge?' <span style="background:var(--gold);color:#0a0800;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:900">'+p.badge+'</span>':'')+'</div>'+
+      '<div class="prod-row-meta">'+p.price.toLocaleString()+' د.ع'+(p.weight?" · "+p.weight:"")+'<span style="color:'+(p.quantity===0?"#ef4444":p.quantity<=5?"#f97316":"#22c55e")+'"> · الكمية: '+p.quantity+'</span></div>'+
+      '</div>'+
+      '<div class="prod-row-btns" id="row-btns-'+p.id+'"></div>';
+    var btns=row.querySelector("#row-btns-"+p.id);
+    var editB=document.createElement("button");editB.className="abtn-sm";editB.textContent="✏ تعديل";
+    (function(prod){editB.addEventListener("click",function(){editProd(prod);});})(p);
+    var toggleB=document.createElement("button");toggleB.className=p.active?"abtn-sm":"abtn-gr";
+    toggleB.textContent=p.active?"🔴 إخفاء":"🟢 إظهار";
+    (function(pid,act){toggleB.addEventListener("click",async function(){
+      await sb.from("products").update({active:!act}).eq("id",pid);
+      await loadAdmProducts();
+    });})(p.id,p.active);
+    var delB=document.createElement("button");delB.className="abtn-rd";delB.textContent="🗑";
+    (function(pid,nm){delB.addEventListener("click",async function(){
+      if(!confirm("حذف: "+nm+"؟"))return;
+      await sb.from("products").delete().eq("id",pid);
+      await loadAdmProducts();showToast("تم الحذف");
+    });})(p.id,p.name);
+    btns.appendChild(editB);btns.appendChild(toggleB);btns.appendChild(delB);
+    el.appendChild(row);
+  });
+}
+
+// ADD/EDIT PRODUCT
+function setEmoji(e){$("pf-emoji").value=e;$("pf-emoji-preview").textContent=e;document.querySelectorAll(".emoji-opt").forEach(function(el){el.classList.toggle("sel",el.textContent===e);});}
+function resetForm(){
+  $("edit-prod-id").value="";
+  ["pf-name","pf-desc","pf-weight","pf-badge"].forEach(function(id){$(id).value="";});
+  $("pf-price").value="";$("pf-qty").value="";$("pf-cat").value="عام";
+  setEmoji("🍯");$("add-form-title").textContent="➕ إضافة منتج جديد";
+  $("pf-err").style.display="none";$("pf-ok").style.display="none";
+}
+function editProd(p){
+  admTab("add");
+  $("edit-prod-id").value=p.id;
+  $("pf-name").value=p.name||"";$("pf-desc").value=p.description||"";
+  $("pf-price").value=p.price||"";$("pf-weight").value=p.weight||"";
+  $("pf-qty").value=p.quantity||0;$("pf-cat").value=p.category||"عام";
+  $("pf-badge").value=p.badge||"";
+  setEmoji(p.emoji||"🍯");
+  $("add-form-title").textContent="✏ تعديل: "+p.name;
+}
+async function saveProd(){
+  var name=$("pf-name").value.trim(),price=parseFloat($("pf-price").value),qty=parseInt($("pf-qty").value)||0;
+  if(!name){$("pf-err").textContent="اسم المنتج مطلوب";$("pf-err").style.display="block";return;}
+  if(!price||price<=0){$("pf-err").textContent="السعر مطلوب ويجب أن يكون أكبر من صفر";$("pf-err").style.display="block";return;}
+  $("pf-err").style.display="none";
+  var data={name:name,description:$("pf-desc").value.trim()||null,price:price,weight:$("pf-weight").value.trim()||null,quantity:qty,category:$("pf-cat").value,emoji:$("pf-emoji").value.trim()||"🍯",badge:$("pf-badge").value.trim()||null};
+  var editId=$("edit-prod-id").value;
+  var r=editId?await sb.from("products").update(data).eq("id",editId):await sb.from("products").insert([data]);
+  if(r.error){$("pf-err").textContent="خطأ: "+r.error.message;$("pf-err").style.display="block";return;}
+  $("pf-ok").textContent=editId?"✅ تم تحديث المنتج بنجاح":"✅ تم إضافة المنتج بنجاح";$("pf-ok").style.display="block";
+  await loadAdmProducts();
+  setTimeout(function(){resetForm();admTab("products");},1500);
+}
+
+// STATS
+async function loadStats(){
+  var r=await sb.from("products").select("*");
+  var prods=r.data||[];
+  var total=prods.length,active=prods.filter(function(p){return p.active;}).length;
+  var outOfStock=prods.filter(function(p){return p.quantity===0;}).length;
+  var lowStock=prods.filter(function(p){return p.quantity>0&&p.quantity<=5;}).length;
+  var totalValue=prods.reduce(function(a,p){return a+p.price*p.quantity;},0);
+  $("stats-grid").innerHTML=
+    '<div class="stat-box"><span class="stat-val">'+total+'</span><span class="stat-lbl">إجمالي المنتجات</span></div>'+
+    '<div class="stat-box"><span class="stat-val" style="color:#22c55e">'+active+'</span><span class="stat-lbl">منتجات نشطة</span></div>'+
+    '<div class="stat-box"><span class="stat-val" style="color:#ef4444">'+outOfStock+'</span><span class="stat-lbl">نفذت الكمية</span></div>'+
+    '<div class="stat-box"><span class="stat-val" style="color:#f97316">'+lowStock+'</span><span class="stat-lbl">مخزون منخفض</span></div>';
+  var lowEl=$("low-stock-list");
+  var lowProds=prods.filter(function(p){return p.quantity<=5;}).sort(function(a,b){return a.quantity-b.quantity;});
+  if(!lowProds.length){lowEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--mute)">كل المنتجات بمخزون جيد ✅</div>';return;}
+  lowEl.innerHTML=lowProds.map(function(p){
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--dark);border-radius:10px;margin-bottom:8px">'+
+      '<span style="font-size:28px">'+p.emoji+'</span>'+
+      '<div style="flex:1"><div style="font-size:13px;font-weight:700">'+p.name+'</div>'+
+      '<div style="font-size:12px;color:'+(p.quantity===0?"#ef4444":"#f97316")+'">الكمية: '+p.quantity+(p.quantity===0?" (نفذت!)":"")+'</div></div>'+
+      '<button onclick="editProd('+JSON.stringify(p).replace(/"/g,"'")+');admTab('add')" style="background:var(--dark2);border:1px solid rgba(200,148,58,.2);color:var(--mute);font-family:Cairo,sans-serif;font-size:11px;cursor:pointer;padding:5px 10px;border-radius:7px">تعديل</button>'+
+      '</div>';
+  }).join("");
+}
+
+// SETTINGS
+function changeAdmPw(){
+  var np=$("new-pw").value,np2=$("new-pw2").value,msg=$("pw-msg");
+  if(!np||!np2){msg.textContent="ملء الحقلين مطلوب";msg.style.background="#1a0505";msg.style.color="#ef4444";msg.style.display="block";return;}
+  if(np.length<6){msg.textContent="6 أحرف على الأقل";msg.style.background="#1a0505";msg.style.color="#ef4444";msg.style.display="block";return;}
+  if(np!==np2){msg.textContent="كلمتا المرور غير متطابقتين";msg.style.background="#1a0505";msg.style.color="#ef4444";msg.style.display="block";return;}
+  localStorage.setItem(ADM_PW_KEY,hp(np));
+  msg.textContent="✅ تم تغيير كلمة المرور";msg.style.background="#052e16";msg.style.color="#22c55e";msg.style.display="block";
+  $("new-pw").value=$("new-pw2").value="";
+}
+
+// SWIPE TO CLOSE
 var ty=0;
 document.getElementById("prod-modal").addEventListener("touchstart",function(e){ty=e.touches[0].clientY;},{passive:true});
 document.getElementById("prod-modal").addEventListener("touchend",function(e){if(e.changedTouches[0].clientY-ty>80)closePM();},{passive:true});
+
+// SCROLL HEADER
+window.addEventListener("scroll",function(){
+  var h=document.querySelector("header");
+  if(h)h.style.boxShadow=window.scrollY>40?"0 4px 20px rgba(0,0,0,.5)":"none";
+});
+
+// INIT
+loadProducts();
 </script>
 </body>
 </html>
