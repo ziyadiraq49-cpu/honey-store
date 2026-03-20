@@ -80,7 +80,7 @@ section{padding:72px 16px}
 @media(min-width:500px){.prods-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px}}
 .pcard{background:var(--dark2);border:1px solid rgba(200,148,58,.1);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
 .pcard:hover{border-color:rgba(200,148,58,.35);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
-.pcard-img{width:100%;aspect-ratio:1;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:clamp(52px,12vw,72px);position:relative}
+.pcard-img{width:100%;aspect-ratio:1;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:clamp(52px,12vw,72px);position:relative;overflow:hidden}
 .pcard-badge{position:absolute;top:10px;right:10px;background:var(--gold);color:#0a0800;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px}
 .pcard-out{position:absolute;top:10px;left:10px;background:#450a0a;color:#ef4444;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px;border:1px solid #7f1d1d}
 .pcard-body{padding:12px}
@@ -460,7 +460,18 @@ document.getElementById("adm-pw").addEventListener("keydown",function(e){
             <input class="ainp" id="pf-badge" placeholder="مثال: الأكثر مبيعاً، جديد، فاخر">
           </div>
           <div>
-            <div class="albl">أيقونة المنتج</div>
+            <div class="albl">صورة المنتج</div>
+            <div id="img-preview-wrap" style="display:none;margin-bottom:10px">
+              <img id="img-preview" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;border:1px solid rgba(200,148,58,.2)">
+            </div>
+            <label style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--dark);border:1.5px dashed rgba(200,148,58,.3);border-radius:12px;padding:16px;cursor:pointer;font-size:13px;color:var(--mute)">
+              <span id="upload-lbl">📷 اضغط لرفع صورة</span>
+              <input type="file" id="pf-img" accept="image/*" style="display:none" onchange="previewImg(this)">
+            </label>
+            <input type="hidden" id="pf-img-url" value="">
+          </div>
+          <div>
+            <div class="albl">أيقونة المنتج (تظهر إذا لم تكن هناك صورة)</div>
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
               <div id="pf-emoji-preview" style="font-size:36px;background:var(--dark);border-radius:10px;padding:8px;min-width:52px;text-align:center">🍯</div>
               <input class="ainp" id="pf-emoji" value="🍯" placeholder="🍯" style="flex:1" oninput="document.getElementById('pf-emoji-preview').textContent=this.value||'🍯'">
@@ -627,7 +638,7 @@ function openProd(id){
   curProd=products.find(function(p){return p.id===id;});if(!curProd)return;
   var outOfStock=curProd.quantity===0;
   $("pm-content").innerHTML=
-    '<div class="pm-icon">'+curProd.emoji+'</div>'+
+    (curProd.image_url?'<img src="'+curProd.image_url+'" style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:16px">':'<div class="pm-icon">'+curProd.emoji+'</div>')+
     '<div class="pm-name">'+curProd.name+'</div>'+
     (curProd.weight?'<div class="pm-weight">'+curProd.weight+'</div>':'')+
     (curProd.description?'<div class="pm-desc">'+curProd.description+'</div>':'')+
@@ -796,32 +807,78 @@ function renderAdmProds(list){
 // ADD/EDIT PRODUCT
 function setEmoji(e){$("pf-emoji").value=e;$("pf-emoji-preview").textContent=e;document.querySelectorAll(".emoji-opt").forEach(function(el){el.classList.toggle("sel",el.textContent===e);});}
 function resetForm(){
-  $("edit-prod-id").value="";
-  ["pf-name","pf-desc","pf-weight","pf-badge"].forEach(function(id){$(id).value="";});
-  $("pf-price").value="";$("pf-qty").value="";$("pf-cat").value="عام";
-  setEmoji("🍯");$("add-form-title").textContent="➕ إضافة منتج جديد";
-  $("pf-err").style.display="none";$("pf-ok").style.display="none";
+  document.getElementById("edit-prod-id").value="";
+  ["pf-name","pf-desc","pf-weight","pf-badge"].forEach(function(id){document.getElementById(id).value="";});
+  document.getElementById("pf-price").value="";document.getElementById("pf-qty").value="";document.getElementById("pf-cat").value="عام";
+  document.getElementById("pf-img").value="";document.getElementById("pf-img-url").value="";
+  document.getElementById("img-preview-wrap").style.display="none";
+  document.getElementById("upload-lbl").textContent="📷 اضغط لرفع صورة";
+  setEmoji("🍯");document.getElementById("add-form-title").textContent="➕ إضافة منتج جديد";
+  document.getElementById("pf-err").style.display="none";document.getElementById("pf-ok").style.display="none";
 }
 function editProd(p){
   admTab("add");
-  $("edit-prod-id").value=p.id;
-  $("pf-name").value=p.name||"";$("pf-desc").value=p.description||"";
-  $("pf-price").value=p.price||"";$("pf-weight").value=p.weight||"";
-  $("pf-qty").value=p.quantity||0;$("pf-cat").value=p.category||"عام";
-  $("pf-badge").value=p.badge||"";
+  document.getElementById("edit-prod-id").value=p.id;
+  document.getElementById("pf-name").value=p.name||"";
+  document.getElementById("pf-desc").value=p.description||"";
+  document.getElementById("pf-price").value=p.price||"";
+  document.getElementById("pf-weight").value=p.weight||"";
+  document.getElementById("pf-qty").value=p.quantity||0;
+  document.getElementById("pf-cat").value=p.category||"عام";
+  document.getElementById("pf-badge").value=p.badge||"";
+  document.getElementById("pf-img-url").value=p.image_url||"";
+  if(p.image_url){
+    document.getElementById("img-preview").src=p.image_url;
+    document.getElementById("img-preview-wrap").style.display="block";
+    document.getElementById("upload-lbl").textContent="✅ صورة موجودة — اضغط لتغييرها";
+  }else{
+    document.getElementById("img-preview-wrap").style.display="none";
+    document.getElementById("upload-lbl").textContent="📷 اضغط لرفع صورة";
+  }
   setEmoji(p.emoji||"🍯");
-  $("add-form-title").textContent="✏ تعديل: "+p.name;
+  document.getElementById("add-form-title").textContent="✏ تعديل: "+p.name;
 }
+function previewImg(input){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    document.getElementById("img-preview").src=e.target.result;
+    document.getElementById("img-preview-wrap").style.display="block";
+    document.getElementById("upload-lbl").textContent="✅ تم اختيار الصورة — اضغط لتغييرها";
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+async function uploadImage(file,prodId){
+  var ext=file.name.split(".").pop()||"jpg";
+  var path="product_"+prodId+"_"+Date.now()+"."+ext;
+  var r=await sb.storage.from("products").upload(path,file,{upsert:true,contentType:file.type});
+  if(r.error){console.error("Upload error:",r.error);return null;}
+  var url=sb.storage.from("products").getPublicUrl(path);
+  return url.data.publicUrl;
+}
+
 async function saveProd(){
-  var name=$("pf-name").value.trim(),price=parseFloat($("pf-price").value),qty=parseInt($("pf-qty").value)||0;
-  if(!name){$("pf-err").textContent="اسم المنتج مطلوب";$("pf-err").style.display="block";return;}
-  if(!price||price<=0){$("pf-err").textContent="السعر مطلوب ويجب أن يكون أكبر من صفر";$("pf-err").style.display="block";return;}
-  $("pf-err").style.display="none";
-  var data={name:name,description:$("pf-desc").value.trim()||null,price:price,weight:$("pf-weight").value.trim()||null,quantity:qty,category:$("pf-cat").value,emoji:$("pf-emoji").value.trim()||"🍯",badge:$("pf-badge").value.trim()||null};
-  var editId=$("edit-prod-id").value;
+  var name=document.getElementById("pf-name").value.trim(),price=parseFloat(document.getElementById("pf-price").value),qty=parseInt(document.getElementById("pf-qty").value)||0;
+  if(!name){document.getElementById("pf-err").textContent="اسم المنتج مطلوب";document.getElementById("pf-err").style.display="block";return;}
+  if(!price||price<=0){document.getElementById("pf-err").textContent="السعر مطلوب ويجب أن يكون أكبر من صفر";document.getElementById("pf-err").style.display="block";return;}
+  document.getElementById("pf-err").style.display="none";
+  document.getElementById("save-prod-btn").disabled=true;document.getElementById("save-prod-btn").textContent="جاري الحفظ...";
+  var editId=document.getElementById("edit-prod-id").value;
+  var imageUrl=document.getElementById("pf-img-url").value||null;
+  var imgFile=document.getElementById("pf-img").files[0];
+  // Upload image if selected
+  if(imgFile){
+    var tempId=editId||("new_"+Date.now());
+    var uploaded=await uploadImage(imgFile,tempId);
+    if(uploaded)imageUrl=uploaded;
+  }
+  var data={name:name,description:document.getElementById("pf-desc").value.trim()||null,price:price,weight:document.getElementById("pf-weight").value.trim()||null,quantity:qty,category:document.getElementById("pf-cat").value,emoji:document.getElementById("pf-emoji").value.trim()||"🍯",badge:document.getElementById("pf-badge").value.trim()||null};
+  if(imageUrl)data.image_url=imageUrl;
   var r=editId?await sb.from("products").update(data).eq("id",editId):await sb.from("products").insert([data]);
-  if(r.error){$("pf-err").textContent="خطأ: "+r.error.message;$("pf-err").style.display="block";return;}
-  $("pf-ok").textContent=editId?"✅ تم تحديث المنتج بنجاح":"✅ تم إضافة المنتج بنجاح";$("pf-ok").style.display="block";
+  document.getElementById("save-prod-btn").disabled=false;document.getElementById("save-prod-btn").textContent="حفظ المنتج";
+  if(r.error){document.getElementById("pf-err").textContent="خطأ: "+r.error.message;document.getElementById("pf-err").style.display="block";return;}
+  document.getElementById("pf-ok").textContent=editId?"✅ تم تحديث المنتج بنجاح":"✅ تم إضافة المنتج بنجاح";document.getElementById("pf-ok").style.display="block";
   await loadAdmProducts();
   setTimeout(function(){resetForm();admTab("products");},1500);
 }
